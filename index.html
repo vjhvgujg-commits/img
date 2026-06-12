@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lumina • enhance</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: 262 83 67;
+        }
+        
+        .tail-container {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .logo-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .hero-bg {
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+        }
+
+        .image-container {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .enhanced-img {
+            filter: contrast(115%) brightness(108%) saturate(118%);
+            transition: filter 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .upload-zone {
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .upload-zone:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        }
+
+        .slider-thumb {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: rgb(167 139 250);
+            border-radius: 9999px;
+            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.3);
+            cursor: pointer;
+        }
+
+        .comparison-label {
+            position: absolute;
+            top: 20px;
+            padding: 4px 18px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 9999px;
+            backdrop-filter: blur(8px);
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(167, 139, 250, 0.15) 50%
+            );
+            background-size: 100% 6px;
+            pointer-events: none;
+            animation: scan 4s linear infinite;
+            opacity: 0.15;
+        }
+
+        @keyframes scan {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 400px; }
+        }
+
+        .pixel {
+            image-rendering: pixelated;
+        }
+    </style>
+</head>
+<body class="tail-container bg-zinc-950 text-zinc-200">
+    <div class="max-w-screen-xl mx-auto">
+        <!-- navbar -->
+        <nav class="flex items-center justify-between border-b border-zinc-800 px-8 py-5 bg-zinc-950">
+            <div class="flex items-center gap-x-3">
+                <div class="w-8 h-8 bg-violet-600 rounded-2xl flex items-center justify-center shadow-inner">
+                    <span class="text-white text-2xl leading-none mt-0.5">✦</span>
+                </div>
+                <div>
+                    <span class="logo-font text-3xl font-semibold tracking-tighter text-white">lumina</span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-x-8 text-sm font-medium">
+                <a href="#" onclick="switchTab(0)" class="tab-link text-white flex items-center gap-x-1 active">
+                    <span>ENHANCE</span>
+                </a>
+                <a href="#" onclick="switchTab(1)" class="tab-link text-zinc-400 hover:text-zinc-200 transition-colors">EXAMPLES</a>
+                <a href="#" onclick="switchTab(2)" class="tab-link text-zinc-400 hover:text-zinc-200 transition-colors">HOW IT WORKS</a>
+            </div>
+            
+            <div class="flex items-center gap-x-4">
+                <div onclick="useSampleImage()" 
+                     class="flex items-center px-5 h-9 text-xs font-mono tracking-widest border border-violet-400 text-violet-300 rounded-3xl hover:bg-violet-950 transition-colors cursor-pointer">
+                    TRY SAMPLE
+                </div>
+                <button onclick="fakeLogin()" 
+                        class="px-6 py-2.5 bg-white text-zinc-900 rounded-3xl text-sm font-semibold flex items-center gap-x-2 hover:shadow-xl hover:shadow-violet-500/30 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7" />
+                    </svg>
+                    <span>SIGN IN</span>
+                </button>
+            </div>
+        </nav>
+
+        <div class="flex">
+            <!-- main content -->
+            <div class="flex-1 p-8">
+                <!-- header -->
+                <div class="flex justify-between items-end mb-8">
+                    <div>
+                        <div class="inline-flex items-center gap-x-2 bg-zinc-900 text-violet-400 text-xs font-medium px-4 h-6 rounded-3xl mb-3">
+                            <div class="w-2 h-2 bg-violet-400 rounded-full animate-pulse"></div>
+                            AI POWERED
+                        </div>
+                        <h1 class="text-6xl font-semibold tracking-tighter logo-font text-white">Increase image quality</h1>
+                        <p class="text-zinc-400 mt-3 max-w-md text-lg">Upload any photo. Our AI instantly upscales, sharpens, and restores detail in real-time.</p>
+                    </div>
+                    
+                    <div class="hidden lg:flex flex-col items-end">
+                        <div class="flex items-center gap-x-5 text-xs">
+                            <div class="flex items-center gap-x-1.5">
+                                <div class="h-px w-8 bg-gradient-to-r from-transparent to-emerald-400"></div>
+                                <span class="uppercase tracking-[1px]">2×</span>
+                            </div>
+                            <div class="flex items-center gap-x-1.5">
+                                <div class="h-px w-8 bg-gradient-to-r from-transparent to-amber-400"></div>
+                                <span class="uppercase tracking-[1px]">4×</span>
+                            </div>
+                        </div>
+                        <div class="text-[10px] text-zinc-500 font-mono mt-1">RESOLUTION BOOST</div>
+                    </div>
+                </div>
+
+                <!-- UPLOAD VIEW -->
+                <div id="upload-view" class="block">
+                    <div onclick="triggerUpload()" 
+                         class="upload-zone border-2 border-dashed border-zinc-700 hover:border-violet-400 rounded-3xl h-[420px] flex flex-col items-center justify-center cursor-pointer bg-zinc-900/50">
+                        <div class="w-16 h-16 mb-6 rounded-2xl bg-zinc-800 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-violet-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v-4m0 0l4 4m-4-4l4-4m12 0v4m0 0l-4-4m4 4l-4 4" />
+                            </svg>
+                        </div>
+                        <div class="text-xl font-medium text-white mb-1">Drop image here</div>
+                        <div class="text-zinc-400 text-sm mb-8">or click to browse from your device</div>
+                        
+                        <div class="flex items-center gap-x-8 text-xs text-zinc-500">
+                            <div class="flex items-center gap-x-2">
+                                <span class="px-3 py-1 bg-zinc-800 rounded-2xl">JPG</span>
+                            </div>
+                            <div class="flex items-center gap-x-2">
+                                <span class="px-3 py-1 bg-zinc-800 rounded-2xl">PNG</span>
+                            </div>
+                            <div class="flex items-center gap-x-2">
+                                <span class="px-3 py-1 bg-zinc-800 rounded-2xl">WEBP</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-auto text-[10px] text-zinc-500 flex items-center gap-x-5">
+                            <div>MAX 20MB</div>
+                            <div class="w-px h-3 bg-zinc-700"></div>
+                            <div>AI ENHANCED IN SECONDS</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center gap-x-6 mt-8 text-xs">
+                        <div onclick="useSampleImage(1)" 
+                             class="flex items-center gap-x-2 px-4 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-3xl cursor-pointer transition-colors">
+                            <img src="https://picsum.photos/id/1015/48/48" alt="" 
+                                 class="w-6 h-6 object-cover rounded-2xl">
+                            <div>
+                                <div class="font-medium text-white text-xs">Mountain lake</div>
+                                <div class="text-emerald-300 text-[10px]">LOW RES • 720×480</div>
+                            </div>
+                        </div>
+                        
+                        <div onclick="useSampleImage(2)" 
+                             class="flex items-center gap-x-2 px-4 py-3 bg-zinc-900 hover:bg-zinc-800 rounded-3xl cursor-pointer transition-colors">
+                            <img src="https://picsum.photos/id/201/48/48" alt="" 
+                                 class="w-6 h-6 object-cover rounded-2xl">
+                            <div>
+                                <div class="font-medium text-white text-xs">Urban street</div>
+                                <div class="text-emerald-300 text-[10px]">BLURRY • 640×360</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EDITOR VIEW -->
+                <div id="editor-view" class="hidden">
+                    <div class="flex gap-8">
+                        <!-- sidebar controls -->
+                        <div class="w-72 bg-zinc-900 rounded-3xl p-6 flex flex-col">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="uppercase text-xs font-mono tracking-widest text-violet-400">Adjustments</div>
+                                <button onclick="resetFilters()" 
+                                        class="text-xs px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-2xl flex items-center gap-x-1 text-zinc-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.058 11H1M12 3v2m0 16v2m9-9H15" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7 7-7" />
+                                    </svg>
+                                    <span>RESET</span>
+                                </button>
+                            </div>
+                            
+                            <!-- sliders -->
+                            <div class="space-y-7 flex-1">
+                                <!-- contrast -->
+                                <div>
+                                    <div class="flex justify-between items-baseline mb-3">
+                                        <div class="text-sm font-medium flex items-center gap-x-2">
+                                            <span class="text-amber-400">◉</span>
+                                            <span>Contrast</span>
+                                        </div>
+                                        <span id="contrast-value" class="tabular-nums font-mono text-xs bg-zinc-800 w-8 text-center rounded-xl py-px">115</span>
+                                    </div>
+                                    <input type="range" id="contrast-slider" 
+                                           min="70" max="180" value="115"
+                                           oninput="updateFilterValues()"
+                                           class="w-full accent-violet-400 bg-zinc-700 rounded-full h-1 outline-none">
+                                </div>
+                                
+                                <!-- sharpness -->
+                                <div>
+                                    <div class="flex justify-between items-baseline mb-3">
+                                        <div class="text-sm font-medium flex items-center gap-x-2">
+                                            <span class="text-sky-400">⚡</span>
+                                            <span>Sharpness</span>
+                                        </div>
+                                        <span id="sharpness-value" class="tabular-nums font-mono text-xs bg-zinc-800 w-8 text-center rounded-xl py-px">65</span>
+                                    </div>
+                                    <input type="range" id="sharpness-slider" 
+                                           min="0" max="100" value="65"
+                                           oninput="updateFilterValues()"
+                                           class="w-full accent-violet-400 bg-zinc-700 rounded-full h-1 outline-none">
+                                </div>
+                                
+                                <!-- brightness -->
+                                <div>
+                                    <div class="flex justify-between items-baseline mb-3">
+                                        <div class="text-sm font-medium flex items-center gap-x-2">
+                                            <span class="text-yellow-400">☀</span>
+                                            <span>Brightness</span>
+                                        </div>
+                                        <span id="brightness-value" class="tabular-nums font-mono text-xs bg-zinc-800 w-8 text-center rounded-xl py-px">105</span>
+                                    </div>
+                                    <input type="range" id="brightness-slider" 
+                                           min="70" max="140" value="105"
+                                           oninput="updateFilterValues()"
+                                           class="w-full accent-violet-400 bg-zinc-700 rounded-full h-1 outline-none">
+                                </div>
+                                
+                                <!-- saturation -->
+                                <div>
+                                    <div class="flex justify-between items-baseline mb-3">
+                                        <div class="text-sm font-medium flex items-center gap-x-2">
+                                            <span class="text-pink-400">🌈</span>
+                                            <span>Saturation</span>
+                                        </div>
+                                        <span id="saturation-value" class="tabular-nums font-mono text-xs bg-zinc-800 w-8 text-center rounded-xl py-px">125</span>
+                                    </div>
+                                    <input type="range" id="saturation-slider" 
+                                           min="70" max="160" value="125"
+                                           oninput="updateFilterValues()"
+                                           class="w-full accent-violet-400 bg-zinc-700 rounded-full h-1 outline-none">
+                                </div>
+                            </div>
+                            
+                            <div class="pt-8 border-t border-zinc-800 mt-auto">
+                                <div onclick="autoEnhance()" 
+                                     class="flex items-center justify-center gap-x-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white h-12 rounded-3xl font-medium cursor-pointer active:scale-95 transition-transform">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894L18 21H6l-2.236-8.106A2 2 0 015.236 10H10" />
+                                    </svg>
+                                    <span>AUTO ENHANCE</span>
+                                </div>
+                            </div>
+                            
+                            <!-- upscale options -->
+                            <div class="mt-6">
+                                <div class="text-xs uppercase font-mono text-zinc-400 mb-3">Upscale factor</div>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div onclick="selectUpscale(this)" 
+                                         class="upscale-btn bg-zinc-800 hover:bg-emerald-900 border border-transparent hover:border-emerald-400 text-center py-4 rounded-2xl cursor-pointer text-sm transition-all active:scale-95" data-factor="1">
+                                        <div class="text-emerald-300 text-lg font-semibold">1×</div>
+                                        <div class="text-[10px] text-zinc-500">ORIGINAL</div>
+                                    </div>
+                                    <div onclick="selectUpscale(this)" 
+                                         class="upscale-btn bg-emerald-900 border border-emerald-400 text-center py-4 rounded-2xl cursor-pointer text-sm transition-all active:scale-95 shadow-inner" data-factor="2">
+                                        <div class="text-emerald-300 text-lg font-semibold">2×</div>
+                                        <div class="text-[10px] text-emerald-400">RECOMMENDED</div>
+                                    </div>
+                                    <div onclick="selectUpscale(this)" 
+                                         class="upscale-btn bg-zinc-800 hover:bg-emerald-900 border border-transparent hover:border-emerald-400 text-center py-4 rounded-2xl cursor-pointer text-sm transition-all active:scale-95" data-factor="4">
+                                        <div class="text-emerald-300 text-lg font-semibold">4×</div>
+                                        <div class="text-[10px] text-zinc-500">PRO</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-[10px] text-center text-zinc-500 mt-8">
+                                Changes applied in real-time
+                            </div>
+                        </div>
+                        
+                        <!-- image comparison -->
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between mb-4 px-1">
+                                <div class="flex items-center gap-x-6">
+                                    <div onclick="setViewMode(0)" id="view-original-btn"
+                                         class="flex items-center gap-x-2 text-xs uppercase font-medium cursor-pointer">
+                                        <div class="w-3 h-3 rounded-full bg-orange-400"></div>
+                                        <span class="text-orange-300">ORIGINAL</span>
+                                    </div>
+                                    <div onclick="setViewMode(1)" id="view-enhanced-btn"
+                                         class="flex items-center gap-x-2 text-xs uppercase font-medium cursor-pointer border-b-2 border-violet-400 pb-px">
+                                        <div class="w-3 h-3 rounded-full bg-violet-400"></div>
+                                        <span class="text-violet-300">ENHANCED</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center gap-x-3">
+                                    <button onclick="showProcessingModal()" 
+                                            class="flex items-center px-5 h-9 text-xs rounded-3xl border border-zinc-700 hover:border-zinc-400 transition-colors">
+                                        <span class="font-mono">PROCESS AGAIN</span>
+                                    </button>
+                                    
+                                    <button onclick="downloadImage()" 
+                                            class="flex items-center gap-x-2 bg-white text-zinc-950 px-6 h-9 rounded-3xl text-sm font-semibold">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M4 16v-4m0 0l4 4m-4-4l4-4m12 0v4m0-4l-4 4m4-4l-4-4" />
+                                        </svg>
+                                        <span>DOWNLOAD</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- images -->
+                            <div class="grid grid-cols-2 gap-6 relative" style="height: 480px">
+                                <!-- original -->
+                                <div class="relative bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl image-container">
+                                    <div class="comparison-label left-6 text-orange-300 text-[10px]">ORIGINAL</div>
+                                    <img id="original-image" 
+                                         class="w-full h-full object-contain pixel"
+                                         alt="original image">
+                                    <div class="scanline"></div>
+                                    <div class="absolute bottom-4 left-4 bg-black/70 text-[10px] font-mono px-3 py-1 rounded-2xl text-zinc-400 flex items-center">
+                                        <span id="original-dimensions">1280 × 720</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- enhanced -->
+                                <div class="relative bg-zinc-900 rounded-3xl overflow-hidden border border-violet-400 shadow-2xl image-container">
+                                    <div class="comparison-label right-6 text-violet-300 text-[10px]">ENHANCED • AI</div>
+                                    <img id="enhanced-image" 
+                                         class="w-full h-full object-contain enhanced-img"
+                                         alt="enhanced image">
+                                    <div id="enhance-overlay" 
+                                         onclick="this.style.display='none'"
+                                         class="hidden absolute inset-0 bg-black/60 flex items-center justify-center cursor-pointer">
+                                        <div class="text-center">
+                                            <div class="inline-block animate-spin w-5 h-5 border-2 border-violet-400 border-t-transparent rounded-full mb-3"></div>
+                                            <div class="text-xs text-violet-200 tracking-widest">RENDERING 2× UPSCALE</div>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-4 right-4 bg-black/70 text-[10px] font-mono px-3 py-1 rounded-2xl text-emerald-400 flex items-center gap-x-2">
+                                        <div class="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></div>
+                                        <span id="enhanced-dimensions">2560 × 1440</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- divider hint -->
+                                <div class="absolute left-1/2 top-8 bottom-8 w-px bg-gradient-to-b from-transparent via-violet-300 to-transparent hidden lg:flex items-center justify-center">
+                                    <div class="bg-zinc-900 text-violet-300 text-[10px] font-bold px-2.5 py-px rounded rotate-90 tracking-widest">AI</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 bg-zinc-900 border border-zinc-800 rounded-3xl p-5 text-xs flex items-center justify-between">
+                                <div class="flex items-center gap-x-8">
+                                    <div>
+                                        <span class="font-mono text-emerald-400">94%</span>
+                                        <span class="text-zinc-400 ml-2">QUALITY SCORE</span>
+                                    </div>
+                                    <div class="h-3 w-px bg-zinc-700"></div>
+                                    <div class="flex items-center gap-x-5 text-zinc-400">
+                                        <div onclick="applyPreset(0)" class="cursor-pointer hover:text-white transition-colors">NATURAL</div>
+                                        <div onclick="applyPreset(1)" class="cursor-pointer hover:text-white transition-colors">VIVID</div>
+                                        <div onclick="applyPreset(2)" class="cursor-pointer hover:text-white transition-colors">DETAIL</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-[10px] font-medium text-zinc-500">
+                                    <div class="bg-zinc-800 text-violet-300 px-4 py-2 rounded-3xl flex items-center gap-x-2">
+                                        <span class="relative flex h-3 w-3">
+                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full h-3 w-3 bg-violet-500"></span>
+                                        </span>
+                                        LIVE PREVIEW
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- status bar -->
+                <div class="mt-8 flex items-center justify-between text-[10px] font-mono text-zinc-500 px-4">
+                    <div class="flex items-center gap-x-6">
+                        <div id="current-file-name" class="hidden">lake-sunset.jpg</div>
+                        <div onclick="switchToUpload()" 
+                             class="flex items-center gap-x-1 cursor-pointer hover:text-zinc-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M6 18L18 6M6 6h12v12" />
+                            </svg>
+                            <span>NEW IMAGE</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-x-5">
+                        <a href="#" class="hover:text-zinc-300">Feedback</a>
+                        <a href="#" class="hover:text-zinc-300">Docs</a>
+                        <div class="text-emerald-400">• ONLINE</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- right column info -->
+            <div class="w-80 bg-zinc-900 border-l border-zinc-800 p-6 hidden xl:flex flex-col">
+                <div class="text-xs uppercase mb-4 text-zinc-400 font-medium">Recent enhancements</div>
+                
+                <div class="space-y-6">
+                    <!-- history item -->
+                    <div class="flex gap-x-3">
+                        <img src="https://picsum.photos/id/1015/64/64" 
+                             class="w-14 h-14 object-cover rounded-2xl">
+                        <div class="flex-1">
+                            <div class="text-xs text-white">mountain-lake-lowres.jpg</div>
+                            <div class="text-emerald-400 text-xs font-medium">2× upscale • 98% quality</div>
+                            <div class="h-1.5 bg-zinc-700 rounded-3xl mt-3 overflow-hidden">
+                                <div class="h-1.5 w-[98%] bg-gradient-to-r from-emerald-400 to-cyan-400"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-x-3">
+                        <img src="https://picsum.photos/id/29/64/64" 
+                             class="w-14 h-14 object-cover rounded-2xl">
+                        <div class="flex-1">
+                            <div class="text-xs text-white">portrait-old-film.png</div>
+                            <div class="text-emerald-400 text-xs font-medium">denoised • restored colors</div>
+                            <div class="h-1.5 bg-zinc-700 rounded-3xl mt-3 overflow-hidden">
+                                <div class="h-1.5 w-[87%] bg-gradient-to-r from-violet-400 to-fuchsia-400"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-auto">
+                    <div class="rounded-3xl bg-zinc-950 p-5 text-xs leading-snug">
+                        <div class="flex justify-between text-violet-200 mb-4">
+                            <div class="font-medium">Pro tip</div>
+                        </div>
+                        <div class="text-zinc-400">
+                            For best results upload images under 5 megapixels. Our AI model uses 
+                            <span class="text-white">latent diffusion</span> to intelligently fill in missing details.
+                        </div>
+                    </div>
+                    
+                    <!-- model badge -->
+                    <div class="mt-8 flex justify-center">
+                        <div class="inline-flex items-center gap-x-3 text-xs bg-black px-5 py-3 rounded-3xl">
+                            <div class="text-teal-400">🧠</div>
+                            <div>
+                                <div class="font-medium text-white">LUMINA-4K</div>
+                                <div class="text-[9px] text-teal-300 -mt-0.5">v0.8.4 • diffusion</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div onclick="window.location.reload()" 
+                     class="mt-auto text-center text-zinc-500 hover:text-zinc-400 cursor-pointer text-xs flex items-center justify-center gap-x-2 py-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.058 11H1M12 3v2m0 16v2m9-9H15m-6 0l-3 3m0-6l3-3" />
+                    </svg>
+                    <span>RESTART DEMO</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- floating toast -->
+    <div id="toast" onclick="this.classList.add('hidden')" 
+         class="hidden fixed bottom-6 right-6 bg-zinc-800 border border-violet-300 text-violet-100 text-sm px-5 h-11 rounded-3xl flex items-center shadow-2xl">
+        Image downloaded successfully ✓
+    </div>
+    
+    <!-- processing modal -->
+    <div onclick="if(event.target.id === 'modal-backdrop') this.style.display = 'none'" 
+         id="modal-backdrop"
+         class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+        <div onclick="event.stopImmediatePropagation()" 
+             class="w-full max-w-md bg-zinc-900 rounded-3xl p-8">
+            <div class="flex justify-center mb-6">
+                <div class="relative">
+                    <div class="w-16 h-16 border-4 border-zinc-700 rounded-2xl"></div>
+                    <div id="modal-spinner" 
+                         class="absolute top-0 left-0 w-16 h-16 border-4 border-transparent border-t-violet-400 rounded-2xl animate-spin"></div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <div class="text-lg font-medium text-white">Enhancing image...</div>
+                <div class="text-zinc-400 text-sm mt-2">Our AI is reconstructing details using neural upsampling</div>
+                
+                <!-- progress -->
+                <div class="mt-10">
+                    <div class="h-px bg-zinc-700 relative">
+                        <div id="progress-bar" 
+                             class="absolute left-0 top-0 h-px bg-white transition-all"
+                             style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div id="progress-text" class="font-mono text-xs text-right text-violet-300 mt-3">37%</div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 text-xs mt-16">
+                <div class="bg-zinc-800 rounded-2xl p-4 text-center">
+                    <div class="text-teal-300">DENOISE</div>
+                    <div class="text-4xl font-light text-white mt-1">82%</div>
+                </div>
+                <div class="bg-zinc-800 rounded-2xl p-4 text-center">
+                    <div class="text-amber-300">DETAIL</div>
+                    <div class="text-4xl font-light text-white mt-1">4K</div>
+                </div>
+            </div>
+            
+            <button onclick="hideProcessingModal()" 
+                    class="w-full mt-8 h-10 text-xs font-medium border border-zinc-600 hover:bg-zinc-800 transition-colors rounded-3xl">
+                CANCEL
+            </button>
+        </div>
+    </div>
+    
+    <footer class="bg-black py-6 text-center text-zinc-600 text-xs">
+        <div class="max-w-screen-xl mx-auto px-8 flex justify-between items-center">
+            <div>DEMO PURPOSES ONLY • FILTERS SIMULATE AI ENHANCEMENT</div>
+            <div class="flex items-center gap-x-5">
+                <div class="flex gap-x-px">
+                    <div class="w-2 h-3.5 bg-violet-300"></div>
+                    <div class="w-2 h-5 bg-fuchsia-300"></div>
+                    <div class="w-2 h-2 bg-cyan-300"></div>
+                </div>
+                <div>MADE IN 15 MINUTES</div>
+            </div>
+        </div>
+    </footer>
+    
+    <input type="file" id="hidden-file-input" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="handleFileSelect(event)">
+    
+    <script>
+        // Tailwind script run
+        function initializeTailwind() {
+            const style = document.createElement('style')
+            style.innerHTML = `
+                @layer utilities {
+                    .text-balance {
+                        text-wrap: balance;
+                    }
+                }
+            `
+            document.head.append(style)
+        }
+        
+        let originalImageSrc = ''
+        let currentFilters = {
+            contrast: 115,
+            sharpness: 65,
+            brightness: 105,
+            saturation: 125
+        }
+        let upscaleFactor = 2
+        let currentImageObj = null
+        
+        const originalImg = document.getElementById('original-image')
+        const enhancedImg = document.getElementById('enhanced-image')
+        
+        function init() {
+            initializeTailwind()
+            
+            // Tailwind run
+            function runTailwind() {
+                // No need as CDN script already inited
+            }
+            runTailwind()
+            
+            // Make sliders nicer
+            const sliders = document.querySelectorAll('input[type="range"]')
+            sliders.forEach(slider => {
+                slider.addEventListener('input', function() {
+                    updateSliderFill(this)
+                })
+                updateSliderFill(slider)
+            })
+            
+            // Load a sample automatically
+            setTimeout(() => {
+                loadSampleImage(1)
+            }, 420)
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.metaKey && e.key === "k") {
+                    e.preventDefault()
+                    triggerUpload()
+                }
+            })
+            
+            // Make images unselectable
+            originalImg.draggable = false
+            enhancedImg.draggable = false
+        }
+        
+        function updateSliderFill(slider) {
+            const percent = (slider.value - slider.min) / (slider.max - slider.min) * 100
+            slider.style.background = `linear-gradient(to right, rgb(167 139 250) ${percent}%, #3f3f46 ${percent}%)`
+        }
+        
+        function triggerUpload() {
+            document.getElementById('hidden-file-input').click()
+        }
+        
+        function handleFileSelect(e) {
+            const file = e.target.files[0]
+            if (!file) return
+            processSelectedFile(file)
+        }
+        
+        function processSelectedFile(file) {
+            const reader = new FileReader()
+            reader.onload = function(ev) {
+                originalImageSrc = ev.target.result
+                
+                // Set both images
+                originalImg.src = originalImageSrc
+                enhancedImg.src = originalImageSrc
+                
+                // Set filename
+                document.getElementById('current-file-name').classList.remove('hidden')
+                document.getElementById('current-file-name').innerHTML = 
+                    `<span class="text-emerald-400">●</span> ${file.name}`
+                
+                // Show editor
+                switchToEditor()
+                
+                // Load image for canvas processing
+                currentImageObj = new Image()
+                currentImageObj.onload = function() {
+                    document.getElementById('original-dimensions').textContent = 
+                        `${currentImageObj.width} × ${currentImageObj.height}`
+                    document.getElementById('enhanced-dimensions').textContent = 
+                        `${Math.round(currentImageObj.width * upscaleFactor)} × ${Math.round(currentImageObj.height * upscaleFactor)}`
+                }
+                currentImageObj.src = originalImageSrc
+            }
+            reader.readAsDataURL(file)
+        }
+        
+        function loadSampleImage(sampleId) {
+            let url = ''
+            let dims = ''
+            
+            if (sampleId === 1) {
+                url = 'https://picsum.photos/id/1015/1200/800'
+                dims = '1200 × 800'
+            } else if (sampleId === 2) {
+                url = 'https://picsum.photos/id/201/900/620'
+                dims = '900 × 620'
+            } else {
+                url = 'https://picsum.photos/id/160/1100/720'
+                dims = '1100 × 720'
+            }
+            
+            originalImageSrc = url
+            
+            originalImg.src = url
+            enhancedImg.src = url
+            
+            document.getElementById('original-dimensions').textContent = dims
+            document.getElementById('enhanced-dimensions').textContent = 
+                `${Math.round(parseInt(dims.split('×')[0]) * 2)} × ${Math.round(parseInt(dims.split('×')[1]) * 2)}`
+            
+            currentImageObj = new Image()
+            currentImageObj.crossOrigin = "anonymous"
+            currentImageObj.src = url
+            
+            // Show editor automatically
+            switchToEditor()
+        }
+        
+        function useSampleImage(id) {
+            if (!id) id = 1
+            loadSampleImage(id)
+        }
+        
+        function updateFilterValues() {
+            currentFilters.contrast = parseInt(document.getElementById('contrast-slider').value)
+            currentFilters.sharpness = parseInt(document.getElementById('sharpness-slider').value)
+            currentFilters.brightness = parseInt(document.getElementById('brightness-slider').value)
+            currentFilters.saturation = parseInt(document.getElementById('saturation-slider').value)
+            
+            // Update labels
+            document.getElementById('contrast-value').textContent = currentFilters.contrast
+            document.getElementById('sharpness-value').textContent = currentFilters.sharpness
+            document.getElementById('brightness-value').textContent = currentFilters.brightness
+            document.getElementById('saturation-value').textContent = currentFilters.saturation
+            
+            // Apply to enhanced image
+            let filterStr = `contrast(${currentFilters.contrast}%) brightness(${currentFilters.brightness}%) saturate(${currentFilters.saturation}%)`
+            
+            // Fake a little extra sharpness using contrast
+            if (currentFilters.sharpness > 50) {
+                const extra = Math.round((currentFilters.sharpness - 50) / 3)
+                filterStr += ` contrast(${115 + extra}%)`
+            }
+            
+            enhancedImg.style.filter = filterStr
+        }
+        
+        function autoEnhance() {
+            // Animate the sliders
+            const contrastSlider = document.getElementById('contrast-slider')
+            const sharpnessSlider = document.getElementById('sharpness-slider')
+            const brightnessSlider = document.getElementById('brightness-slider')
+            const saturationSlider = document.getElementById('saturation-slider')
+            
+            contrastSlider.value = 138
+            sharpnessSlider.value = 92
+            brightnessSlider.value = 112
+            saturationSlider.value = 142
+            
+            updateFilterValues()
+            
+            // Flash effect
+            enhancedImg.style.transitionDuration = '80ms'
+            setTimeout(() => {
+                enhancedImg.style.filter = `contrast(148%) brightness(118%) saturate(155%)`
+            }, 10)
+            setTimeout(() => {
+                enhancedImg.style.transitionDuration = '400ms'
+                updateFilterValues()
+            }, 240)
+            
+            showToast("Auto-enhanced using AI model")
+        }
+        
+        function resetFilters() {
+            currentFilters = {
+                contrast: 115,
+                sharpness: 65,
+                brightness: 105,
+                saturation: 125
+            }
+            
+            document.getElementById('contrast-slider').value = 115
+            document.getElementById('sharpness-slider').value = 65
+            document.getElementById('brightness-slider').value = 105
+            document.getElementById('saturation-slider').value = 125
+            
+            updateFilterValues()
+            
+            showToast("Filters reset to default")
+        }
+        
+        function applyPreset(preset) {
+            if (preset === 0) {
+                // natural
+                document.getElementById('contrast-slider').value = 105
+                document.getElementById('sharpness-slider').value = 40
+                document.getElementById('brightness-slider').value = 100
+                document.getElementById('saturation-slider').value = 105
+            } else if (preset === 1) {
+                // vivid
+                document.getElementById('contrast-slider').value = 135
+                document.getElementById('sharpness-slider').value = 80
+                document.getElementById('brightness-slider').value = 115
+                document.getElementById('saturation-slider').value = 145
+            } else if (preset === 2) {
+                // detail
+                document.getElementById('contrast-slider').value = 125
+                document.getElementById('sharpness-slider').value = 95
+                document.getElementById('brightness-slider').value = 98
+                document.getElementById('saturation-slider').value = 115
+            }
+            updateFilterValues()
+        }
+        
+        function selectUpscale(el) {
+            document.querySelectorAll('.upscale-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-900', 'border-emerald-400')
+                btn.classList.add('bg-zinc-800', 'border-transparent')
+            })
+            el.classList.add('bg-emerald-900', 'border-emerald-400')
+            
+            upscaleFactor = parseInt(el.getAttribute('data-factor'))
+            
+            if (currentImageObj) {
+                const w = currentImageObj.width * upscaleFactor
+                const h = currentImageObj.height * upscaleFactor
+                document.getElementById('enhanced-dimensions').textContent = `${Math.round(w)} × ${Math.round(h)}`
+            }
+            
+            showToast(`Upscale set to ${upscaleFactor}×`)
+        }
+        
+        function switchToEditor() {
+            document.getElementById('upload-view').classList.add('hidden')
+            document.getElementById('editor-view').classList.remove('hidden')
+            updateFilterValues()
+        }
+        
+        function switchToUpload() {
+            document.getElementById('editor-view').classList.add('hidden')
+            document.getElementById('upload-view').classList.remove('hidden')
+            document.getElementById('current-file-name').classList.add('hidden')
+        }
+        
+        function downloadImage() {
+            if (!currentImageObj) {
+                showToast("No image loaded!")
+                return
+            }
+            
+            const canvas = document.createElement('canvas')
+            const ctx = canvas.getContext('2d')
+            
+            // Apply upscale
+            canvas.width = currentImageObj.width * upscaleFactor
+            canvas.height = currentImageObj.height * upscaleFactor
+            
+            // Set the filter
+            let filterString = enhancedImg.style.filter || 'contrast(115%) brightness(105%) saturate(125%)'
+            ctx.filter = filterString
+            
+            // Draw with filter
+            ctx.drawImage(
+                currentImageObj, 
+                0, 0, 
+                canvas.width, 
+                canvas.height
+            )
+            
+            // Add a small signature in corner
+            ctx.filter = 'none'
+            ctx.font = '500 13px Inter, sans-serif'
+            ctx.fillStyle = 'rgba(255,255,255,0.5)'
+            ctx.textAlign = 'right'
+            ctx.fillText('lumina.ai', canvas.width - 25, canvas.height - 25)
+            
+            // Trigger download
+            const link = document.createElement('a')
+            link.download = 'enhanced-by-lumina.png'
+            link.href = canvas.toDataURL('image/png')
+            link.click()
+            
+            showToast('Image saved as PNG (2× resolution)')
+        }
+        
+        function showToast(message) {
+            const toast = document.getElementById('toast')
+            toast.textContent = message
+            toast.classList.remove('hidden')
+            toast.style.transform = 'translateY(30px)'
+            toast.style.opacity = '0'
+            
+            // Animate in
+            setTimeout(() => {
+                toast.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                toast.style.transform = 'translateY(0)'
+                toast.style.opacity = '1'
+            }, 10)
+            
+            // Hide after 3s
+            setTimeout(() => {
+                toast.style.opacity = '0'
+                toast.style.transform = 'translateY(20px)'
+                setTimeout(() => {
+                    toast.classList.add('hidden')
+                }, 300)
+            }, 3000)
+        }
+        
+        function showProcessingModal() {
+            const modal = document.getElementById('modal-backdrop')
+            modal.classList.remove('hidden')
+            modal.style.display = 'flex'
+            
+            let progress = 12
+            const progressBar = document.getElementById('progress-bar')
+            const progressText = document.getElementById('progress-text')
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 13 + 7
+                if (progress > 100) progress = 100
+                
+                progressBar.style.width = `${progress}%`
+                progressText.textContent = `${Math.floor(progress)}%`
+                
+                if (progress >= 100) {
+                    clearInterval(interval)
+                    setTimeout(() => {
+                        hideProcessingModal()
+                        // Randomly change filter a little
+                        const r = Math.random()
+                        if (r > 0.6) {
+                            document.getElementById('sharpness-slider').value = 88
+                            updateFilterValues()
+                        }
+                        showToast('Image reprocessed')
+                    }, 420)
+                }
+            }, 80)
+        }
+        
+        function hideProcessingModal() {
+            const modal = document.getElementById('modal-backdrop')
+            modal.style.display = 'none'
+        }
+        
+        function setViewMode(mode) {
+            const origBtn = document.getElementById('view-original-btn')
+            const enhBtn = document.getElementById('view-enhanced-btn')
+            
+            if (mode === 0) {
+                origBtn.classList.add('border-b-2', 'border-orange-400')
+                enhBtn.classList.remove('border-b-2', 'border-violet-400')
+                originalImg.style.opacity = 1
+                enhancedImg.style.opacity = 0.2
+            } else {
+                origBtn.classList.remove('border-b-2', 'border-orange-400')
+                enhBtn.classList.add('border-b-2', 'border-violet-400')
+                originalImg.style.opacity = 1
+                enhancedImg.style.opacity = 1
+            }
+        }
+        
+        function fakeLogin() {
+            showToast("Welcome back, demo user 👾")
+        }
+        
+        function switchTab(n) {
+            // Demo - only first tab is functional
+            const links = document.querySelectorAll('.tab-link')
+            links.forEach((l, index) => {
+                if (index === n) {
+                    l.classList.add('text-white', 'active')
+                } else {
+                    l.classList.remove('text-white', 'active')
+                }
+            })
+            
+            if (n === 1) {
+                showToast("Examples would load here in a full version")
+            }
+            if (n === 2) {
+                showToast("Learn how the AI works in the real product")
+            }
+        }
+        
+        // Make functions global
+        window.triggerUpload = triggerUpload
+        window.handleFileSelect = handleFileSelect
+        window.updateFilterValues = updateFilterValues
+        window.autoEnhance = autoEnhance
+        window.resetFilters = resetFilters
+        window.downloadImage = downloadImage
+        window.showProcessingModal = showProcessingModal
+        window.hideProcessingModal = hideProcessingModal
+        window.useSampleImage = useSampleImage
+        window.selectUpscale = selectUpscale
+        window.applyPreset = applyPreset
+        window.switchToUpload = switchToUpload
+        window.fakeLogin = fakeLogin
+        window.switchTab = switchTab
+        window.setViewMode = setViewMode
+        
+        // Boot app
+        window.onload = init
+    </script>
+</body>
+</html>
